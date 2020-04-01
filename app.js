@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport')
 var mongoose = require('mongoose');
 
-require('./config/auth-config.js');
+require('./config/passport-config.js');
 
 var app = express();
 
@@ -26,6 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/index.route'));
+app.use('/auth',require('./routes/auth.route'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

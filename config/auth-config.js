@@ -1,27 +1,22 @@
-var User = require('../models/users.model.js').User;
-var passport = require("passport");
-var LocalStrategy = require('passport-local').Strategy;
+// expose our config directly to our application using module.exports
+module.exports = {
 
-passport.use('local-login', new LocalStrategy(function (username, password, done) {
-    User.findOne({ "providers.name": username, "providers.provider":"local" },user => {
-        if (user && user.password === password) {
-            done(null, user);
-        } else {
-            done(null, false);
-        }
-    });
-}));
+    'facebookAuth' : {
+        'clientID'      : 'your-secret-clientID-here', // your App ID
+        'clientSecret'  : 'your-client-secret-here', // your App Secret
+        'callbackURL'   : 'http://localhost:3000/auth/facebook/callback'
+    },
 
-passport.use('local-register', new LocalStrategy(function (username, password, done){
-    User.findOne({ name: username },user => {
-        if(!user){
-            let registered = new User({providers:[{provider:'local',name:username,password:password}],roles:[]});
-            registered.save((err)=>{
-                if(err){return done(err, false)}
-                return done(null, registered);
-            })
-        } else {
-            return done (null, false)
-        }
-    });
-}))
+    'twitterAuth' : {
+        'consumerKey'       : 'your-consumer-key-here',
+        'consumerSecret'    : 'your-client-secret-here',
+        'callbackURL'       : 'http://localhost:3000/auth/twitter/callback'
+    },
+
+    'googleAuth' : {
+        'clientID'      : '426270260487-4kklac8sf3tt25032ukmutp6jrivfuua.apps.googleusercontent.com',
+        'clientSecret'  : 'e_vTC42XdpRV2Mkx27Ih-IMF',
+        'callbackURL'   : 'http://localhost:3000/auth/google/callback'
+    }
+
+};

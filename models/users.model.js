@@ -1,8 +1,10 @@
 var mongoose = require('mongoose');
-var ProviderSchema = require('./providers.model').ProviderSchema
 
 let userSchema = mongoose.Schema({
-    providers: {type:[ProviderSchema],required:true},
+    provider: "google"|"facebook"|"twitter",
+    id: {type:String, required:true},
+    name: {type:String, required:true},
+    email: {type:String, required:true},
     roles: {type:[String],required:true},
 })
 
