@@ -21,6 +21,7 @@
     "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^3.0.1",
     "passport-twitter": "^1.0.4",
+    "request": "^2.88.2",
     "serve-favicon": "~2.4.5"
   }
 }
