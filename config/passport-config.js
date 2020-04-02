@@ -4,6 +4,9 @@ var configAuth = require('./auth-config');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var JWTStrategy = require('passport-jwt').Strategy;
+var ExtractJWT = require('passport-jwt').ExtractJwt;
+var secretJWT = require('./jwt-config').secret;
 
 // =========================================================================
 // FACEBOOK ================================================================
@@ -28,7 +31,8 @@ function(token, refreshToken, profile, done) {
                 registered.provider = "facebook"
                 registered.id = profile.id
                 registered.name  = profile.name.givenName;
-                registered.email = profile.emails[0].value; // pull the first email
+                registered.email = profile.emails[0].value; 
+                registered.roles = []
 
                 registered.save(function(err) {
                     if (err){
@@ -53,7 +57,7 @@ passport.use('twitter',new TwitterStrategy({
 function(token, refreshToken, profile, done) {
     process.nextTick(function() {
         
-        // try to find the user based on their google id
+        // try to find the user based on their twitter id
         User.findOne({ 'id' : profile.id, 'provider':'twitter' }, function(err, user) {
             if (err)
                 return done(err,false);
@@ -65,7 +69,8 @@ function(token, refreshToken, profile, done) {
                 registered.provider = "twitter"
                 registered.id = profile.id
                 registered.name  = profile.displayName;
-                registered.email = profile.emails[0].value; // pull the first email
+                registered.email = profile.emails[0].value;
+                registered.roles = []
 
                 registered.save(function(err) {
                     if (err){
@@ -102,7 +107,8 @@ function(token, refreshToken, profile, done) {
                 registered.provider = "google"
                 registered.id = profile.id
                 registered.name  = profile.displayName;
-                registered.email = profile.emails[0].value; // pull the first email
+                registered.email = profile.emails[0].value;
+                registered.roles = []
 
                 registered.save(function(err) {
                     if (err){
@@ -114,4 +120,25 @@ function(token, refreshToken, profile, done) {
         });
     });
 
+}));
+
+// =========================================================================
+// JWT =====================================================================
+// =========================================================================
+
+const opts = {
+    jwtFromRequest: ExtractJWT.fromUrlQueryParameter('token'),
+    secretOrKey: secretJWT
+}
+
+passport.use('jwt',new JWTStrategy(opts,(payload,done)=>{
+    User.findOne({'id':payload.id,'provider':payload.provider},(err,user)=>{
+        if(err){
+            return done(err,false);
+        } else if (user) {
+            return done(null,user);
+        } else {
+            return done(null,false);
+        }
+    })
 }));

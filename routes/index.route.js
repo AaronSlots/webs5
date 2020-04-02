@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport')
 
 /* GET home page. */
 router.get('/', function(req, res){
@@ -12,8 +13,9 @@ router.get('/', function(req, res){
     });
 });
 
-router.get('/admin', function(req, res){
-    res.json({ message: 'Success! Je bent een administrator en je mag deze pagina bekijken.' });
+router.get('/profile',passport.authenticate('jwt',{session:false}), function(req, res){
+    const token = req.query.token;
+	return res.json({ token:token })
 });
 
 module.exports = router
