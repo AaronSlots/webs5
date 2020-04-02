@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport')
 var mongoose = require('mongoose');
+var request = require('request');
 
 require('./config/passport-config.js');
 
@@ -45,5 +46,18 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.json(err);
 });
+
+baseUrl = 'https://api.imagga.com/v2/tags?image_url='
+apiKey = 'acc_0dbc8dcbf0a181a';
+apiSecret = '69f2658b95f1293390d95967dbf52ad0';
+imageUrl = 'https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg';
+
+request.get(baseUrl+imageUrl,
+ function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+}).auth(apiKey, apiSecret, true);
+
 
 module.exports = app;
