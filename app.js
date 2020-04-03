@@ -11,6 +11,8 @@ var mongoose = require('mongoose');
 require('./config/passport-config.js');
 
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,6 +31,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index.route'));
 app.use('/auth',require('./routes/auth.route'));
 app.use('/images',require('./routes/images.route'))
+app.use('/socket.io',express.static('node_modules/socket.io-client/dist'))
+
+io.on('connection', function (socket) {
+  console.log('test');
+});
+
+server.listen(80);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -8,7 +8,7 @@ router.get('/', (req, res)=>{
     let baseUrl = 'https://api.imagga.com/v2/tags'
     let apiKey = 'acc_0dbc8dcbf0a181a';
     let apiSecret = '69f2658b95f1293390d95967dbf52ad0';
-    let filePath = 'https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg';
+    let imageUrl = 'https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg';
     request.get(baseUrl+"?image_url="+imageUrl+"&language=nl",function (error,response,body) {
         let image = new Image({imageUrl:imageUrl, imagga:JSON.parse(body)})
         image.save();

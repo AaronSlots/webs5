@@ -15,7 +15,7 @@ router.get('/', function(req, res){
 
 router.get('/profile',passport.authenticate('jwt',{session:false}), function(req, res){
     const token = req.query.token;
-	return res.json({ token:token })
+	return res.render('profile.ejs',{user:req.user,token:token})
 });
 
 module.exports = router
