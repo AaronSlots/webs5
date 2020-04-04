@@ -18,7 +18,6 @@
               <p>
                   <strong>id</strong>: <%= user.id %><br>
                   <strong>provider</strong>: <%= user.provider %><br>
-                  <strong>token</strong>: <%= token %><br>
                   <strong>email</strong>: <%= user.email %><br>
                   <strong>name</strong>: <%= user.name %>
               </p>
@@ -29,10 +28,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost');
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
-  });
+  socket.emit('page', '<%= user.name %>','profile');
 </script>
 </body>
 </html>

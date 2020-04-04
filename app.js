@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var passport = require('passport')
 var mongoose = require('mongoose');
 
-
 require('./config/passport-config.js');
 
 var app = express();
@@ -32,10 +31,20 @@ app.use('/', require('./routes/index.route'));
 app.use('/auth',require('./routes/auth.route'));
 app.use('/images',require('./routes/images.route'))
 app.use('/socket.io',express.static('node_modules/socket.io-client/dist'))
+app.get('/update',(req,res)=>{
+  io.on('connect', function (socket) {
+    socket.emit('update','an update occured');
+  });
+  return res.json('succesfully updated');
+})
 
-io.on('connection', function (socket) {
-  console.log('test');
+io.on('connect', function (socket) {
+  socket.on('page',(name, page)=>{
+    console.log(name+' is visitting the '+page+' page.');
+  });
 });
+
+
 
 server.listen(80);
 
