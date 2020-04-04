@@ -25,9 +25,13 @@ let imaggaSchema = mongoose.Schema({
 })
 
 let imageSchema = mongoose.Schema({
-    imageUrl: {type:String, required:true},
     imagga: {type:imaggaSchema, required:true}
 });
 
+let originalImageSchema = mongoose.Schema({
+   // image: { data: Buffer, contentType: String, required: true},
+    imageData: {type: imageSchema, required:true} 
+})
 
 exports.Image = mongoose.model('Image',imageSchema);
+exports.OriginalImage = mongoose.model('OriginalImage', originalImageSchema);
