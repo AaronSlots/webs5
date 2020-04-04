@@ -21,8 +21,16 @@ router.get('/', (req, res)=>{
         image.save();
 
         let originalImageResult =  image.imagga.result.tags
+        let tryImage = image.imagga.result.tags
         originalImageResult.forEach(obj => {
-            console.log("ewa")
+            tryImage.forEach(obj1 => {
+                if(obj.tag.nl == obj1.tag.nl){
+                    if(obj.confidence <= obj1.confidence+10 && obj.confidence >= obj1.confidence-10){
+                        console.log(obj.confidence)
+                        console.log(obj1.confidence+10)
+                    }
+                }
+            })
         });
         return res.json(image.toObject());
     }).auth(apiKey, apiSecret, true);
@@ -30,10 +38,8 @@ router.get('/', (req, res)=>{
 })
 
 router.get('/compare', (req,res,)=>{
-    let originalImageResult =  Image.imagga.result
-    originalImageResult.forEach(element => {
-        console.log("ewa")
+
     });
-});
+
 
 module.exports = router;
