@@ -12,7 +12,7 @@ router.get('/', function(req, res){
             { method: 'GET', url: 'http://localhost:3000/auth/facebook', urlParams:[], queryParams:[], body:[], explanation:'login using facebook' },
             { method: 'GET', url: 'http://localhost:3000/auth/twitter', urlParams:[], queryParams:[], body:[], explanation:'login using twitter' },
             { method: 'POST', url: 'http://localhost:3000/images', urlParams:[], queryParams:[], body:[{name:'image',explanation:'THE-BASE-IMAGE',isRequired:true}], explanation:'post your base image' },
-            { method: 'POST', url: 'http://localhost:3000/images/:id', urlParams:[{name:'id',explanation:'THE-GROUP-NAME'}], queryParams:[], body:[{name:'image',explanation:'THE-IMAGE-TO-COMPARE',isRequired:true}], explanation:'compare an image to the base image' },
+            { method: 'POST', url: 'http://localhost:3000/images/:id', urlParams:[{name:'id',explanation:'THE-GROUP-ID'}], queryParams:[], body:[{name:'image',explanation:'THE-IMAGE-TO-COMPARE',isRequired:true}], explanation:'compare an image to the base image' },
         ]
     }
 
