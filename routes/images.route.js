@@ -101,9 +101,10 @@ router.get('/:id/comparisons', (req, res)=>{
 function compareImages(confidence_of_tag_img_real, confidence_of_tag_img_send){
     if(confidence_of_tag_img_real > confidence_of_tag_img_send){
         return (confidence_of_tag_img_send/confidence_of_tag_img_real) ;
-        } 
+    } 
     else {
-        return (confidence_of_tag_img_real/confidence_of_tag_img_send) }
+        return (confidence_of_tag_img_real/confidence_of_tag_img_send) 
+    }
 };
 
 

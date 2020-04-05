@@ -30,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index.route'));
 app.use('/auth',require('./routes/auth.route'));
 app.use('/images',require('./routes/images.route'))
+app.use('/users',passport.authenticate('jwt',{session:false}),require('./routes/users.route'))
+
 app.use('/socket.io',express.static('node_modules/socket.io-client/dist'))
 app.get('/update',(req,res)=>{
   io.on('connect', function (socket) {

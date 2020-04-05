@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  </head>
+<body>
+  <div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-cloud"></span> Users Page</h1>
+        <a href="/auth/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="well">
+              <p>
+                <% users.forEach(function(u){ %>
+                  <strong><%= u.name %></strong>: <%= u.email %><br>
+                <% }); %>
+              </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.emit('page', '<%= user.name %>','users');
+</script>
+</body>
+</html>
