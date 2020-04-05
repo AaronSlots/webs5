@@ -24,13 +24,18 @@ let imaggaSchema = mongoose.Schema({
 })
 
 let imageSchema = mongoose.Schema({
-    //image: { data: Buffer, contentType: String, required: true},
+    data:{type: Buffer,required:true}, 
+    contentType: {type:String,required:true},
+})
+
+let dataSchema = mongoose.Schema({
+    image: {type:imageSchema,required:true},
     imagga: {type:imaggaSchema, required:true}
 });
 
 let groupSchema = mongoose.Schema({
-    original: { type:imageSchema, required: true},
-    uploads: {type:[imageSchema], required:true}
+    original: { type:dataSchema, required: true},
+    uploads: {type:[dataSchema], required:true}
 });
 
 exports.Group = mongoose.model('Group',groupSchema);

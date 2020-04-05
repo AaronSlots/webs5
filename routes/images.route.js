@@ -5,18 +5,43 @@ var Group = require('../models/group.model').Group
 var fs = require('fs');
 var imaggaConfig = require('../config/imagga-config')
 
-router.post('/', (req, res) =>{
+
+
+router.get('/original'), function (req, res){
+    let header = 'text/html'
+    if(req.header('Content-Type') != null){
+        header = req.header('Content-Type')
+    }
+    res.header('Content-Type',header);
+    switch(header){
+        case 'text/html': return res.render('images/upload.ejs',{routeId:req.params.id});
+        default: return res.json();
+    }
+}
+
+router.get('/:id/upload', function (req, res) {
+    let header = 'text/html'
+    if(req.header('Content-Type') != null){
+        header = req.header('Content-Type')
+    }
+    res.header('Content-Type',header);
+    switch(header){
+        case 'text/html': return res.render('images/upload.ejs',{routeId:req.params.id});
+        default: return res.json();
+    }
+ })
+
+
+router.post('/',(req, res) =>{
     let baseUrl = imaggaConfig.baseUrl
     let apiKey = imaggaConfig.apiKey
     let apiSecret = imaggaConfig.apiSecret
     let filePath = './resources/fotojpg.jpg';
-    console.log("aa")
     let formData = {
         image : fs.createReadStream(filePath),
     };
 request.post({url:baseUrl, formData: formData },
         function (error, response, body) {
-            console.log("aaa")
             let orgImage = {imagga :JSON.parse(body)}   
             let uplImage = [];
             group =new Group({original: orgImage,upload: uplImage}) 
@@ -26,23 +51,24 @@ request.post({url:baseUrl, formData: formData },
 
 })
 
-router.post('/:id', (req, res)=>{
+router.post('/:id',  (req, res)=>{
     let baseUrl = imaggaConfig.baseUrl
     let apiKey = imaggaConfig.apiKey
     let apiSecret = imaggaConfig.apiSecret
-    let filePath = './resources/foto2.jpg';
-    let formData = {
-        image : fs.createReadStream(filePath),
-    };
-    console.log(req.params.id)
-    request.post({url:baseUrl, formData: formData },
+    let language =imaggaConfig.language
+    let file = req.files.file
+    console.log(file)
+    let img = {}
+    img.data = file.data
+    img.contentType = file.mimetype;
+    let formData = { image_base64:Buffer.from(img.data).toString('base64')}
+    request.post({url:(baseUrl +"tags?" + language), formData:formData},
     function (error, response, body) {
-        Group.findById(req.params.id).then(group=>{
-            console.log(group)
+        Group.findByIdAndUpdate(req.params.id).then(group=>{
             let originalImageResult = group.original.imagga.result.tags
-            let image = {imagga :JSON.parse(body)} 
-            
+            let image = {imagga :JSON.parse(body),image:img} 
             let tryImage = image.imagga.result.tags
+            console.log(tryImage)
             originalImageResult.forEach(obj => {
                 tryImage.forEach(obj1 => {
                     if(obj.tag.nl == obj1.tag.nl){
@@ -53,11 +79,12 @@ router.post('/:id', (req, res)=>{
                 })
             });
             group.uploads.push(image);
-            group.save((err,g)=>{
-                res.json(g.toObject())
-            })
         })
-    }).auth(apiKey, apiSecret, true);
+        res.json('something')
+    }
+    ).auth(apiKey, apiSecret, true);
+
+    
 
 })
 
