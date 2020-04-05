@@ -24,7 +24,7 @@ let imaggaSchema = mongoose.Schema({
 })
 
 let imageSchema = mongoose.Schema({
-    image: { data: Buffer, contentType: String, required: true},
+    //image: { data: Buffer, contentType: String, required: true},
     imagga: {type:imaggaSchema, required:true}
 });
 
