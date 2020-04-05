@@ -38,10 +38,11 @@ router.post('/:id', (req, res)=>{
     request.post({url:baseUrl, formData: formData },
     function (error, response, body) {
         Group.findById(req.params.id).then(group=>{
+            console.log(group)
             let originalImageResult = group.original.imagga.result.tags
-            let image = JSON.parse(body)
+            let image = {imagga :JSON.parse(body)} 
             
-            let tryImage = image.tags
+            let tryImage = image.imagga.result.tags
             originalImageResult.forEach(obj => {
                 tryImage.forEach(obj1 => {
                     if(obj.tag.nl == obj1.tag.nl){
@@ -51,6 +52,10 @@ router.post('/:id', (req, res)=>{
                     }
                 })
             });
+            group.uploads.push(image);
+            group.save((err,g)=>{
+                res.json(g.toObject())
+            })
         })
     }).auth(apiKey, apiSecret, true);
 
