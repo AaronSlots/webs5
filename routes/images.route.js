@@ -23,6 +23,18 @@ router.get('/', function (req, res){
     })
 })
 
+router.get('/:id/upload/:upload_id/tag/:tag_id',function(req,res){
+    let header = 'text/html'
+    if(req.header('Content-Type') != null){
+        header = req.header('Content-Type')
+    }
+    res.header('Content-Type',header);
+    switch(header){
+        case 'text/html': return res.render('images/upload.ejs',{routeId:req.params.id,upload_id:req.params.upload_id,tag_id:req.params.tag_id});
+        default: return res.json();
+    }
+})
+
 
 router.post('/',(req, res) =>{
     let baseUrl = imaggaConfig.baseUrl
@@ -54,6 +66,7 @@ router.get('/original', function (req, res){
         default: return res.json();
     }
 })
+
 router.post('/original' ,(req, res) =>{
     let baseUrl = imaggaConfig.baseUrl
     let apiKey = imaggaConfig.apiKey
@@ -85,10 +98,7 @@ router.get('/:id', function (req, res) {
         case 'text/html': return res.render('images/upload.ejs',{routeId:req.params.id});
         default: return res.json();
     }
- })
-
-
-
+})
 
 router.post('/:id',  (req, res)=>{
     let baseUrl = imaggaConfig.baseUrl
@@ -126,10 +136,6 @@ router.post('/:id',  (req, res)=>{
 
 })
 
-
-
-
-
 router.get('/:id/comparisons', (req, res)=>{
     Group.findById(req.params.id).then(group =>{
         let originalTags =  group.original.imagga.result.tags;
@@ -154,7 +160,6 @@ router.get('/:id/comparisons', (req, res)=>{
         return res.json(scores);
     })
 })
-
 
 function compareImages(confidence_of_tag_img_real, confidence_of_tag_img_send){
     if(confidence_of_tag_img_real > confidence_of_tag_img_send){
