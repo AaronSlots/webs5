@@ -6,6 +6,23 @@ var fs = require('fs');
 var imaggaConfig = require('../config/imagga-config')
 
 router.post('/', (req, res) =>{
+    let baseUrl = imaggaConfig.baseUrl
+    let apiKey = imaggaConfig.apiKey
+    let apiSecret = imaggaConfig.apiSecret
+    let filePath = './resources/fotojpg.jpg';
+    console.log("aa")
+    let formData = {
+        image : fs.createReadStream(filePath),
+    };
+request.post({url:baseUrl, formData: formData },
+        function (error, response, body) {
+            console.log("aaa")
+            let orgImage = {imagga :JSON.parse(body)}   
+            let uplImage = [];
+            group =new Group({original: orgImage,upload: uplImage}) 
+            group.save(); 
+            res.json(group.toObject())     
+        }).auth(apiKey, apiSecret, true);   
 
 })
 
@@ -69,5 +86,8 @@ function compareImages(confidence_of_tag_img_real, confidence_of_tag_img_send){
     else {
         return (confidence_of_tag_img_real/confidence_of_tag_img_send) }
 };
+
+
+
 
 module.exports = router;
