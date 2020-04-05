@@ -27,7 +27,7 @@ router.delete('/:id', function(req, res){
     );
 });
 
-router.update('/:id', function(req, res){
+router.put('/:id', function(req, res){
     User.findByIdAndUpdate(req.params.id).then(
         user=>{
             user.role=req.body.role

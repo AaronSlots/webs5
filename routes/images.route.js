@@ -5,32 +5,11 @@ var Group = require('../models/group.model').Group
 var fs = require('fs');
 var imaggaConfig = require('../config/imagga-config')
 
-
-
-router.get('/original'), function (req, res){
-    let header = 'text/html'
-    if(req.header('Content-Type') != null){
-        header = req.header('Content-Type')
-    }
-    res.header('Content-Type',header);
-    switch(header){
-        case 'text/html': return res.render('images/upload.ejs',{routeId:req.params.id});
-        default: return res.json();
-    }
-}
-
-router.get('/:id/upload', function (req, res) {
-    let header = 'text/html'
-    if(req.header('Content-Type') != null){
-        header = req.header('Content-Type')
-    }
-    res.header('Content-Type',header);
-    switch(header){
-        case 'text/html': return res.render('images/upload.ejs',{routeId:req.params.id});
-        default: return res.json();
-    }
- })
-
+router.get('/', (req,res)=>{
+    Group.find((err,groups)=>{
+        res.json(groups)
+    })
+})
 
 router.post('/',(req, res) =>{
     let baseUrl = imaggaConfig.baseUrl
@@ -50,6 +29,36 @@ request.post({url:baseUrl, formData: formData },
         }).auth(apiKey, apiSecret, true);   
 
 })
+
+
+
+router.get('/original', function (req, res){
+    let header = 'text/html'
+    if(req.header('Content-Type') != null){
+        header = req.header('Content-Type')
+    }
+    res.header('Content-Type',header);
+    switch(header){
+        case 'text/html': return res.render('images/original.ejs');
+        default: return res.json();
+    }
+})
+
+
+router.get('/:id/upload', function (req, res) {
+    let header = 'text/html'
+    if(req.header('Content-Type') != null){
+        header = req.header('Content-Type')
+    }
+    res.header('Content-Type',header);
+    switch(header){
+        case 'text/html': return res.render('images/upload.ejs',{routeId:req.params.id});
+        default: return res.json();
+    }
+ })
+
+
+
 
 router.post('/:id',  (req, res)=>{
     let baseUrl = imaggaConfig.baseUrl
@@ -88,18 +97,6 @@ router.post('/:id',  (req, res)=>{
 
 })
 
-router.get('/', (req,res)=>{
-    Group.find((err,groups)=>{
-        res.json(groups)
-    })
-})
-
-router.get('/:id',(req,res)=>{
-    Group.findById(req.params.id,(err,group)=>{
-        return res.json(group);
-    })
-})
-
 router.get('/:id/comparisons', (req, res)=>{
     Group.findById(req.params.id).then(group =>{
         let originalTags =  group.original.imagga.result.tags;
@@ -133,8 +130,5 @@ function compareImages(confidence_of_tag_img_real, confidence_of_tag_img_send){
         return (confidence_of_tag_img_real/confidence_of_tag_img_send) 
     }
 };
-
-
-
 
 module.exports = router;
