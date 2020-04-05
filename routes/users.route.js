@@ -6,7 +6,7 @@ var User = require('../models/users.model').User;
 router.get('/', function(req, res){
     let user = req.user;
     User.find().then(users=>{
-        let data = {users:users,user,user:user}
+        let data = {users:users,user,user:user,token:req.query.token}
         let header = 'text/html'
         if(req.header('Content-Type') != null){
             header = req.header('Content-Type')
@@ -28,9 +28,10 @@ router.delete('/:id', function(req, res){
 });
 
 router.put('/:id', function(req, res){
-    User.findByIdAndUpdate(req.params.id).then(
+    User.findById(req.params.id).then(
         user=>{
             user.role=req.body.role
+            user.save();
             return res.redirect('/users?token='+req.query.token)
         }
     );

@@ -32,7 +32,7 @@ function(token, refreshToken, profile, done) {
                 registered.id = profile.id
                 registered.name  = profile.name.givenName;
                 registered.email = profile.emails[0].value; 
-                registered.roles = []
+                registered.role = 'user'
 
                 registered.save(function(err) {
                     if (err){
@@ -70,7 +70,7 @@ function(token, refreshToken, profile, done) {
                 registered.id = profile.id
                 registered.name  = profile.displayName;
                 registered.email = profile.emails[0].value;
-                registered.roles = []
+                registered.role = 'user'
 
                 registered.save(function(err) {
                     if (err){
@@ -108,7 +108,7 @@ function(token, refreshToken, profile, done) {
                 registered.id = profile.id
                 registered.name  = profile.displayName;
                 registered.email = profile.emails[0].value;
-                registered.roles = []
+                registered.role = 'user'
 
                 registered.save(function(err) {
                     if (err){
