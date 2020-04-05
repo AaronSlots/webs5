@@ -5,27 +5,24 @@ var Group = require('../models/group.model').Group
 var fs = require('fs');
 var imaggaConfig = require('../config/imagga-config')
 
-router.get('/', (req,res)=>{
-    Group.find((err,groups)=>{
-        res.json(groups)
-    })
-})
 
-router.get('/originals', function (req, res){
+router.get('/', function (req, res){
     console.log('test');
     let header = 'text/html'
 
     if(req.header('Content-Type') != null){
         header = req.header('Content-Type')
     }
-    Group.find((err,groups)=>{
+    
+    Group.find().then(groups=> {
         res.header('Content-Type',header);
         switch(header){
-            case 'text/html': return res.render('images/originalview.ejs');
+            case 'text/html': return res.render('images/originalview.ejs', {groups:groups});
             default: return res.json();
         }
     })
 })
+
 
 router.post('/',(req, res) =>{
     let baseUrl = imaggaConfig.baseUrl
@@ -78,7 +75,7 @@ router.post('/original' ,(req, res) =>{
     }
     ).auth(apiKey, apiSecret, true);
 })
-router.get('/:id/upload', function (req, res) {
+router.get('/:id', function (req, res) {
     let header = 'text/html'
     if(req.header('Content-Type') != null){
         header = req.header('Content-Type')

@@ -8,16 +8,19 @@
   <div class="container">
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-cloud"></span> Upload hunt</h1>
+        <h1><span class="fa fa-cloud"></span> Hunts</h1>
         <a href="/auth/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
 
     <div class="row">
         <div class="col-12">
             <div class="well">
-              <p>
-                <img src="<% groups.original.data %>">
-              </p>
+              
+                <% groups.forEach(function(group){ %>
+                <img src="data:image/<%= group.original.image.contentType %>;base64, <%= Buffer.from(group.original.image.data).toString('base64') %>"  />
+                <form action="/images/<%= group._id %>" method="GET">&emsp; <input type="submit" value="Compare" /></form>
+                <% }); %>
+              
             </div>
         </div>
     </div>
