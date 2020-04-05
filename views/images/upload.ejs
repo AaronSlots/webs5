@@ -8,7 +8,7 @@
   <div class="container">
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-cloud"></span> Compare</h1>
+        <h1><span class="fa fa-cloud"></span> Upload</h1>
         <a href="/auth/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
 
@@ -30,7 +30,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost');
-  socket.emit('page', 'someone','compare');
+  socket.emit('page', 'someone','upload');
 </script>
 </body>
 </html>

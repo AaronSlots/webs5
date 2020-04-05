@@ -11,6 +11,22 @@ router.get('/', (req,res)=>{
     })
 })
 
+router.get('/originals', function (req, res){
+    console.log('test');
+    let header = 'text/html'
+
+    if(req.header('Content-Type') != null){
+        header = req.header('Content-Type')
+    }
+    Group.find((err,groups)=>{
+        res.header('Content-Type',header);
+        switch(header){
+            case 'text/html': return res.render('images/originalview.ejs');
+            default: return res.json();
+        }
+    })
+})
+
 router.post('/',(req, res) =>{
     let baseUrl = imaggaConfig.baseUrl
     let apiKey = imaggaConfig.apiKey
@@ -19,7 +35,7 @@ router.post('/',(req, res) =>{
     let formData = {
         image : fs.createReadStream(filePath),
     };
-request.post({url:baseUrl, formData: formData },
+    request.post({url:baseUrl, formData: formData },
         function (error, response, body) {
             let orgImage = {imagga :JSON.parse(body)}   
             let uplImage = [];
@@ -27,12 +43,10 @@ request.post({url:baseUrl, formData: formData },
             group.save(); 
             res.json(group.toObject())     
         }).auth(apiKey, apiSecret, true);   
-
-})
-
-
+    });
 
 router.get('/original', function (req, res){
+    console.log('test');
     let header = 'text/html'
     if(req.header('Content-Type') != null){
         header = req.header('Content-Type')
@@ -43,8 +57,27 @@ router.get('/original', function (req, res){
         default: return res.json();
     }
 })
-
-
+router.post('/original' ,(req, res) =>{
+    let baseUrl = imaggaConfig.baseUrl
+    let apiKey = imaggaConfig.apiKey
+    let apiSecret = imaggaConfig.apiSecret
+    let language =imaggaConfig.language
+    let file = req.files.file
+    console.log(file)
+    let img = {}
+    img.data = file.data
+    img.contentType = file.mimetype;
+    let formData = { image_base64:Buffer.from(img.data).toString('base64')}
+    request.post({url:(baseUrl +"tags?" + language), formData:formData},
+    function (error, response, body) {  
+        let orgImage = {imagga :JSON.parse(body), image : img}   
+        let uplImage = [];
+        group =new Group({original: orgImage,upload: uplImage})
+        group.save(); 
+        res.json(group.toObject())   
+    }
+    ).auth(apiKey, apiSecret, true);
+})
 router.get('/:id/upload', function (req, res) {
     let header = 'text/html'
     if(req.header('Content-Type') != null){
@@ -90,12 +123,15 @@ router.post('/:id',  (req, res)=>{
             group.uploads.push(image);
         })
         res.json('something')
-    }
-    ).auth(apiKey, apiSecret, true);
+    }).auth(apiKey, apiSecret, true);
 
-    
+
 
 })
+
+
+
+
 
 router.get('/:id/comparisons', (req, res)=>{
     Group.findById(req.params.id).then(group =>{
@@ -121,6 +157,7 @@ router.get('/:id/comparisons', (req, res)=>{
         return res.json(scores);
     })
 })
+
 
 function compareImages(confidence_of_tag_img_real, confidence_of_tag_img_send){
     if(confidence_of_tag_img_real > confidence_of_tag_img_send){
