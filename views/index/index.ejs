@@ -16,8 +16,16 @@
         <div class="col-12">
             <div class="well">
               <p>
-                <% availableRoutes.forEach(function(route,idx){ %>
+                <% availableRoutes.forEach(function(route){ %>
                   <strong><%= route.method %></strong>: <%= route.url %><br>
+                  &nbsp;URL parameters:<br>
+                  <% route.urlParams.forEach(function(param){ %>
+                    &nbsp;&nbsp;<strong><%= param.name %></strong>: &lt;<%= param.explanation %>&gt;<br>
+                  <% }); %>
+                  &nbsp;query parameters:<br>
+                  <% route.queryParams.forEach(function(param){ %>
+                    &nbsp;&nbsp;<strong><%= param.name %></strong> <i><% if(param.isRequired){ %>required<% }else{ %>optional<% } %></i>: &lt;<%= param.explanation %>&gt;<br>
+                  <% }); %>
                 <% }); %>
               </p>
             </div>
