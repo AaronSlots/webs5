@@ -18,13 +18,17 @@
               <p>
                 <% availableRoutes.forEach(function(route){ %>
                   <strong><%= route.method %></strong>: <%= route.url %><br>
-                  &nbsp;URL parameters:<br>
+                  &emsp;URL parameters:<br>
                   <% route.urlParams.forEach(function(param){ %>
-                    &nbsp;&nbsp;<strong><%= param.name %></strong>: &lt;<%= param.explanation %>&gt;<br>
+                    &emsp;&emsp;<strong><%= param.name %></strong>: &lt;<%= param.explanation %>&gt;<br>
                   <% }); %>
-                  &nbsp;query parameters:<br>
+                  &emsp;query parameters:<br>
                   <% route.queryParams.forEach(function(param){ %>
-                    &nbsp;&nbsp;<strong><%= param.name %></strong> <i><% if(param.isRequired){ %>required<% }else{ %>optional<% } %></i>: &lt;<%= param.explanation %>&gt;<br>
+                    &emsp;&emsp;<strong><%= param.name %></strong>: &lt;<%= param.explanation %>&gt; (<i><% if(param.isRequired){ %>required<% }else{ %>optional<% } %></i>)<br>
+                  <% }); %>
+                  &emsp;body:<br>
+                  <% route.body.forEach(function(param){ %>
+                    &emsp;&emsp;<strong><%= param.name %></strong>: &lt;<%= param.explanation %>&gt; (<i><% if(param.isRequired){ %>required<% }else{ %>optional<% } %></i>)<br>
                   <% }); %>
                 <% }); %>
               </p>

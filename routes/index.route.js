@@ -6,11 +6,13 @@ var passport = require('passport')
 router.get('/', function(req, res){
     let data={
         availableRoutes: [
-            { method: 'GET', url: 'http://localhost:3000/', urlParams:[], queryParams:[], explanation:'show all routes of this api' },
-            { method: 'GET', url: 'http://localhost:3000/profile', urlParams:[], queryParams:[{name:'token',explanation:'YOUR-JWT',isRequired:true}], explanation:'see your profile' },
-            { method: 'GET', url: 'http://localhost:3000/auth/google', urlParams:[], queryParams:[], explanation:'login using google' },
-            { method: 'GET', url: 'http://localhost:3000/auth/facebook', urlParams:[], queryParams:[], explanation:'login using facebook' },
-            { method: 'GET', url: 'http://localhost:3000/auth/twitter', urlParams:[], queryParams:[], explanation:'login using twitter' },
+            { method: 'GET', url: 'http://localhost:3000/', urlParams:[], queryParams:[], body:[], explanation:'show all routes of this api' },
+            { method: 'GET', url: 'http://localhost:3000/profile', urlParams:[], queryParams:[{name:'token',explanation:'YOUR-JWT',isRequired:true}], body:[], explanation:'see your profile' },
+            { method: 'GET', url: 'http://localhost:3000/auth/google', urlParams:[], queryParams:[], body:[], explanation:'login using google' },
+            { method: 'GET', url: 'http://localhost:3000/auth/facebook', urlParams:[], queryParams:[], body:[], explanation:'login using facebook' },
+            { method: 'GET', url: 'http://localhost:3000/auth/twitter', urlParams:[], queryParams:[], body:[], explanation:'login using twitter' },
+            { method: 'POST', url: 'http://localhost:3000/images', urlParams:[], queryParams:[], body:[{name:'image',explanation:'THE-BASE-IMAGE',isRequired:true}], explanation:'post your base image' },
+            { method: 'POST', url: 'http://localhost:3000/images/:id', urlParams:[], queryParams:[], body:[{name:'image',explanation:'THE-IMAGE-TO-COMPARE',isRequired:true}], explanation:'compare an image to the base image' },
         ]
     }
 
