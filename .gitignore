@@ -104,3 +104,4 @@ dist
 .tern-port
 config/auth-config.js
 config/jwt-config.js
+config/imagga-config.js
