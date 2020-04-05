@@ -30,7 +30,7 @@ router.post('/:id', (req, res)=>{
     let baseUrl = imaggaConfig.baseUrl
     let apiKey = imaggaConfig.apiKey
     let apiSecret = imaggaConfig.apiSecret
-    let filePath = './resources/fotojpg.jpg';
+    let filePath = './resources/foto2.jpg';
     let formData = {
         image : fs.createReadStream(filePath),
     };
@@ -61,12 +61,20 @@ router.post('/:id', (req, res)=>{
 
 })
 
-router.get('/')
+router.get('/', (req,res)=>{
+    Group.find((err,groups)=>{
+        res.json(groups)
+    })
+})
 
-router.get('/:id')
+router.get('/:id',(req,res)=>{
+    Group.findById(req.params.id,(err,group)=>{
+        return res.json(group);
+    })
+})
 
-router.get('/:id/compare/:id2', (req, res)=>{
-    Image.findById(req.params.id).then(image =>{
+router.get('/:id/comparisons', (req, res)=>{
+    Group.findById(req.params.id).then(group =>{
         Image.findById(req.params.id2).then(image2 => {
             let originalImageResult =  image.imagga.result.tags
             let tryImage = image2.imagga.result.tags
