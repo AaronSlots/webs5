@@ -75,20 +75,26 @@ router.get('/:id',(req,res)=>{
 
 router.get('/:id/comparisons', (req, res)=>{
     Group.findById(req.params.id).then(group =>{
-        Image.findById(req.params.id2).then(image2 => {
-            let originalImageResult =  image.imagga.result.tags
-            let tryImage = image2.imagga.result.tags
-            originalImageResult.forEach(obj => {
-                tryImage.forEach(obj1 => {
-                    if(obj.tag.nl == obj1.tag.nl){
-                        let score =   compareImages(obj.confidence, obj1.confidence);
-                        console.log(score*100)
-                        console.log(obj.tag.nl)
+        let originalTags =  group.original.imagga.result.tags;
+        let uploads = group.uploads;
+        let scores = [];
+        uploads.forEach(image => {
+            let imageTags = image.imagga.result.tags;
+            let imageObject = []
+            originalTags.forEach(originalTag => {
+                imageTags.forEach(imageTag => {
+                    if(originalTag.tag.nl == imageTag.tag.nl){
+                        let score = compareImages(originalTag.confidence, imageTag.confidence);
+                        let scoreObject = {}
+                        scoreObject.score=score*100
+                        scoreObject.tag=originalTag.tag.nl
+                        imageObject.push(scoreObject);
                     }
                 })
-            });
-            return res.json(image.toObject());
+            })
+            scores.push(imageObject);
         })
+        return res.json(scores);
     })
 })
 
